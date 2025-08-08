@@ -48,13 +48,13 @@ Installation
 Download the repository (including the top directory `AutoCreatePage`) to the extension
 directory of your MediaWiki installation. You can do this with git by calling:
 
-`git clone https://github.com/Universal-Omega/AutoCreatePage.git`
+`git clone https://gerrit.wikimedia.org/r/mediawiki/extensions/AutoCreatePage`
 
 from your extension directory. Then add to your LocalSettings.php:
 
 `wfLoadExtension( 'AutoCreatePage' );`
 
-This extension requires MediaWiki 1.36.0+ to work.
+This extension requires MediaWiki 1.39.4+ to work.
 
 
 Configuration

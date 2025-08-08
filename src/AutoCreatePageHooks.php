@@ -3,6 +3,7 @@
 use MediaWiki\Edit\PreparedEdit;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Revision\RenderedRevision;
+use MediaWiki\Title\Title;
 
 class AutoCreatePageHooks {
 
