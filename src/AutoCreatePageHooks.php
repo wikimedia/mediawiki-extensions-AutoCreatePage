@@ -1,6 +1,5 @@
 <?php
 
-use MediaWiki\Edit\PreparedEdit;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Revision\RenderedRevision;
 use MediaWiki\Title\Title;
@@ -11,6 +10,7 @@ class AutoCreatePageHooks {
 	 * @param Title $title
 	 * @param RenderedRevision $renderedRevision
 	 * @param array &$updates
+	 * @return bool|void
 	 */
 	public static function onRevisionDataUpdates( Title $title, RenderedRevision $renderedRevision, array &$updates ) {
 		global $wgAutoCreatePageMaxRecursion;
@@ -18,8 +18,9 @@ class AutoCreatePageHooks {
 		$output = $renderedRevision->getRevisionParserOutput();
 		$createPageData = $output->getExtensionData( 'createPage' );
 
-		if ( is_null( $createPageData ) ) {
-			return true; // no pages to create
+		if ( $createPageData === null ) {
+			// no pages to create
+			return true;
 		}
 		// Prevent pages to be created by pages that are created to avoid loops:
 		$wgAutoCreatePageMaxRecursion--;
@@ -29,7 +30,7 @@ class AutoCreatePageHooks {
 		foreach ( $createPageData as $pageTitleText => $pageContentText ) {
 			$pageTitle = Title::newFromText( $pageTitleText );
 
-			if ( !is_null( $pageTitle ) && !$pageTitle->isKnown() && $pageTitle->canExist() ){
+			if ( $pageTitle !== null && !$pageTitle->isKnown() && $pageTitle->canExist() ) {
 				$newWikiPage = MediaWikiServices::getInstance()->getWikiPageFactory()->newFromTitle( $pageTitle );
 				$pageContent = ContentHandler::makeContent( $pageContentText, $pageTitle );
 
@@ -101,7 +102,7 @@ class AutoCreatePageHooks {
 
 		// Store data in the parser output for later use:
 		$createPageData = $parser->getOutput()->getExtensionData( 'createPage' );
-		if ( is_null( $createPageData ) ) {
+		if ( $createPageData === null ) {
 			$createPageData = [];
 		}
 		$createPageData[$newPageTitleText] = $newPageContent;
@@ -110,4 +111,3 @@ class AutoCreatePageHooks {
 		return '';
 	}
 }
-
